@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CLUB DE RUELLE // SUIVI U13</title>
+<style>
+:root{--bg:#0a0d12;--panel:#11161d;--panel2:#0c1016;--line:#27303b;--ink:#c4ccd6;--dim:#75808d;
+--led:#ffb22e;--ledglow:rgba(255,178,46,.55);--grn:#39e07a;--red:#ff5a52;}
+*{box-sizing:border-box}
+body{margin:0;background:
+  radial-gradient(1200px 500px at 50% -120px,#16202c 0%,var(--bg) 70%);
+  color:var(--ink);font-family:"Segoe UI",Tahoma,sans-serif;font-size:15px;min-height:100vh}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:99;
+  background:repeating-linear-gradient(rgba(255,255,255,.018) 0 1px,transparent 1px 3px)}
+.led{font-family:"Consolas","Courier New",monospace;color:var(--led);
+  text-shadow:0 0 6px var(--ledglow),0 0 2px var(--ledglow);letter-spacing:1px}
+.top{background:linear-gradient(#0e141b,#0a0e13);border-bottom:3px solid var(--led);
+  box-shadow:0 4px 18px rgba(255,178,46,.12);padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.crest{width:46px;height:46px;border:3px solid var(--led);border-radius:6px;display:flex;align-items:center;
+  justify-content:center;font-weight:800;font-size:18px;background:#0c1117;flex-shrink:0}
+.club{font-size:22px;font-weight:800;text-transform:uppercase;background:transparent;border:none;width:auto;max-width:340px}
+.club:focus{outline:1px dashed var(--led)}
+.sub{display:block;color:var(--dim);font-size:10px;letter-spacing:3px;text-transform:uppercase;margin-top:3px}
+.ver{margin-left:auto;border:2px solid var(--line);background:#0c1117;font-size:12px;font-weight:700;
+  padding:5px 11px;border-radius:4px;cursor:default}
+.container{max-width:900px;margin:0 auto;padding:16px}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.stat{flex:1;min-width:118px;background:var(--panel2);border:1px solid var(--line);
+  border-radius:6px;padding:10px 12px;box-shadow:inset 0 0 22px rgba(0,0,0,.6)}
+.stat .v{font-size:30px;font-weight:800;line-height:1}
+.stat .l{font-size:9px;color:var(--dim);margin-top:5px;text-transform:uppercase;letter-spacing:2px}
+nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+nav button{background:#0c1117;border:1px solid var(--line);color:var(--dim);padding:9px 14px;font-size:12px;
+  cursor:pointer;border-radius:4px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700}
+nav button.active{color:var(--led);border-color:var(--led);box-shadow:0 0 10px rgba(255,178,46,.25)}
+.view{display:none}.view.active{display:block}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px;margin-bottom:14px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+label{font-size:10px;color:var(--dim);font-weight:700;display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:1.5px}
+input,select,textarea{font-family:inherit;font-size:14px;padding:9px;border:1px solid var(--line);border-radius:5px;
+  width:100%;background:#0a0e13;color:var(--ink)}
+input:focus,select:focus{outline:none;border-color:var(--led);box-shadow:0 0 8px rgba(255,178,46,.2)}
+.grid{display:flex;gap:12px;flex-wrap:wrap}.col{flex:1;min-width:150px}
+.note{font-size:12px;color:#d9c79a;background:#15110a;border:1px solid #3a2f15;border-left:3px solid var(--led);
+  padding:9px 11px;margin:10px 0;border-radius:0 4px 4px 0}
+button.act{background:var(--led);color:#1a1206;border:none;border-radius:5px;padding:11px 20px;font-size:13px;
+  font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:1.5px;box-shadow:0 0 14px rgba(255,178,46,.35)}
+button.line{background:#0c1117;color:var(--led);border:1px solid var(--led);border-radius:5px;padding:10px 14px;
+  font-size:12px;cursor:pointer;text-transform:uppercase;letter-spacing:1px;font-weight:700}
+button.danger{background:#1a0e0e;color:var(--red);border:1px solid #5a2422;border-radius:5px;padding:9px 14px;
+  font-size:12px;cursor:pointer;font-weight:700}
+.jrow{border:1px solid var(--line);border-radius:6px;padding:12px;margin-bottom:9px;background:var(--panel2)}
+.jrow .nm{font-weight:800;color:var(--led);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;
+  font-family:"Consolas","Courier New",monospace;text-shadow:0 0 6px var(--ledglow)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:5px;overflow:hidden}
+.seg button{border:none;background:#0a0e13;color:var(--dim);padding:7px 15px;font-size:13px;cursor:pointer;font-weight:700}
+.seg button.sel{background:var(--led);color:#1a1206}
+.rng{display:flex;align-items:center;gap:9px}
+.rng input[type=range]{accent-color:var(--led)}
+.rng output{font-weight:800;min-width:24px;text-align:center;font-family:"Consolas",monospace;
+  color:var(--led);text-shadow:0 0 6px var(--ledglow)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{border:1px solid var(--line);padding:6px;text-align:center}
+th{background:#0c1117;color:var(--led);font-weight:700;text-transform:uppercase;font-size:11px;letter-spacing:1px}
+td{background:var(--panel2)}tr:nth-child(even) td{background:#0e131a}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.scroll{max-height:56vh;overflow:auto;border:1px solid var(--line);border-radius:5px}
+.rosrow{display:flex;align-items:center;gap:12px;padding:9px 6px;border-bottom:1px solid var(--line)}
+.rosrow .code{font-weight:800;min-width:38px;font-family:"Consolas",monospace;color:var(--led);text-shadow:0 0 6px var(--ledglow)}
+.rosrow .pn{flex:1;font-weight:700}.rosrow .pp{color:var(--dim);font-size:13px;min-width:120px}
+.foot{text-align:center;color:var(--dim);font-size:11px;padding:18px;letter-spacing:1px;text-transform:uppercase}
+.foot input{display:inline;width:auto;border:none;background:none;color:var(--led);text-align:center;font-weight:700}
+@media(max-width:540px){.col{min-width:100%}.rosrow .pp{display:none}.stat .v{font-size:26px}}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="crest led" id="crest">CR</div>
+  <div>
+    <input class="club led" id="clubName" value="Club de Ruelle" spellcheck="false">
+    <span class="sub">// Suivi U13 — ressenti séance</span>
+  </div>
+  <span class="ver led" id="ver" title="Dernière mise à jour">v2.2</span>
+</div>
+
+<div class="container">
+  <div class="stats" id="stats">
+    <div class="stat"><div class="v led" id="s_lignes">0</div><div class="l">Lignes</div></div>
+    <div class="stat"><div class="v led" id="s_pres">--</div><div class="l">Présence</div></div>
+    <div class="stat"><div class="v led" id="s_fat">--</div><div class="l">Fatigue moy</div></div>
+    <div class="stat"><div class="v led" id="s_imp">--</div><div class="l">Implic. moy</div></div>
+    <div class="stat"><div class="v led" id="s_eff">0</div><div class="l">Effectif</div></div>
+  </div>
+
+  <nav>
+    <button class="active" data-v="coach">Séance</button>
+    <button data-v="joueur">Fiche joueur</button>
+    <button data-v="effectif">Effectif</button>
+    <button data-v="data">Données</button>
+  </nav>
+
+  <div class="view active" id="coach">
+    <div class="box">
+      <div class="grid">
+        <div class="col"><label>Date de la séance</label><input type="date" id="c_date"></div>
+        <div class="col"><label>Intensité</label>
+          <select id="c_int"><option>Faible</option><option selected>Modérée</option><option>Élevée</option></select></div>
+      </div>
+    </div>
+    <div class="note">Présence, retard, puis implication et fatigue pour chaque joueur. Enregistrer crée une ligne par joueur.</div>
+    <div id="coachList"></div>
+    <button class="act" id="saveTeam">Enregistrer la séance</button>
+  </div>
+
+  <div class="view" id="joueur">
+    <div class="box">
+      <div class="grid">
+        <div class="col"><label>Date</label><input type="date" id="j_date"></div>
+        <div class="col"><label>Joueur</label><select id="j_player"></select></div>
+        <div class="col"><label>Intensité ressentie</label>
+          <select id="j_int"><option>Faible</option><option selected>Modérée</option><option>Élevée</option></select></div>
+      </div>
+      <div class="grid" style="margin-top:10px">
+        <div class="col"><label>Présent</label>
+          <div class="seg" id="j_pres"><button data-v="Oui" class="sel">Oui</button><button data-v="Non">Non</button></div></div>
+        <div class="col"><label>Retard</label>
+          <div class="seg" id="j_ret"><button data-v="Non" class="sel">Non</button><button data-v="Oui">Oui</button></div></div>
+        <div class="col" id="j_motifWrap" style="display:none"><label>Motif absence</label>
+          <select id="j_motif"><option>Maladie</option><option>Raison familiale</option><option>École / devoirs</option><option>Blessure légère</option><option>Non communiqué</option></select></div>
+      </div>
+      <div class="grid" style="margin-top:10px">
+        <div class="col"><label>Implication /10</label>
+          <div class="rng"><input type="range" min="1" max="10" value="7" id="j_imp"><output id="j_impv">7</output></div></div>
+        <div class="col"><label>Fatigue /10</label>
+          <div class="rng"><input type="range" min="1" max="10" value="4" id="j_fat"><output id="j_fatv">4</output></div></div>
+      </div>
+      <div style="margin-top:10px"><label>Commentaire</label><input id="j_com" placeholder="optionnel"></div>
+      <div style="margin-top:12px"><button class="act" id="savePlayer">Enregistrer</button></div>
+    </div>
+  </div>
+
+  <div class="view" id="effectif">
+    <div class="box">
+      <label>Ajouter un joueur</label>
+      <div class="grid">
+        <div class="col"><input id="r_name" placeholder="Prénom"></div>
+        <div class="col"><input id="r_post" placeholder="Poste (optionnel)"></div>
+        <div style="flex:0"><button class="act" id="addPlayer" style="height:40px">Ajouter</button></div>
+      </div>
+      <div class="note">Le code (J1, J2, …) est attribué automatiquement et reste aligné avec la colonne « Joueur » du classeur Excel.</div>
+      <div id="roster"></div>
+    </div>
+  </div>
+
+  <div class="view" id="data">
+    <div class="box">
+      <div class="toolbar">
+        <button class="act" id="copyXls">Copier pour Excel</button>
+        <button class="line" id="dlCsv">CSV</button>
+        <button class="line" id="dlJson">Sauvegarde JSON</button>
+        <label class="line" style="cursor:pointer">Importer JSON<input type="file" id="imp" accept=".json" hidden></label>
+        <button class="danger" id="clear">Tout effacer</button>
+      </div>
+      <div class="note">« Copier pour Excel » copie les lignes (tabulations). Dans le classeur, clique la 1re cellule vide de la colonne A de Présences_Entrainements puis colle (Ctrl+V).</div>
+      <div class="scroll">
+        <table id="tbl"><thead><tr>
+          <th>Date</th><th>Joueur</th><th>Prés.</th><th>Ret.</th><th>Motif</th><th>Intens.</th><th>Impl.</th><th>Fat.</th><th>Comm.</th><th></th>
+        </tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="foot">Club de Ruelle —
+  <input id="author" value="staff U13" spellcheck="false"> — saison
+  <input id="season" value="2025/2026" spellcheck="false" style="width:86px">
+</div>
+
+<script>
+const DEFAULT_ROSTER=[["J1","Lucas","Gardien"],["J2","Hugo","Défenseur"],["J3","Noah","Latéral"],
+["J4","Léo","Milieu off."],["J5","Gabriel","Attaquant"],["J6","Adam","Milieu déf."],
+["J7","Raphaël","Ailier"],["J8","Arthur","Défenseur"],["J9","Louis","Milieu off."],
+["J10","Jules","Latéral"],["J11","Maël","Attaquant"],["J12","Tom","Gardien"],
+["J13","Nathan","Ailier"],["J14","Ethan","Milieu déf."],["J15","Sacha","Milieu off."]];
+const COLS=["Date","Joueur","Présent (Oui/Non)","Retard (Oui/Non)","Motif absence","Intensité séance","Implication /10","Fatigue ressentie /10","Commentaire coach"];
+const KEY="u13_ressenti_v1", META="u13_meta_v1", ROS="u13_roster_v1";
+const $=s=>document.querySelector(s);
+let data=loadData(), roster=loadRoster();
+
+function loadData(){try{return JSON.parse(localStorage.getItem(KEY))||[]}catch(e){return[]}}
+function loadRoster(){try{const r=JSON.parse(localStorage.getItem(ROS));return (r&&r.length)?r:DEFAULT_ROSTER.slice()}catch(e){return DEFAULT_ROSTER.slice()}}
+function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function saveRoster(){localStorage.setItem(ROS,JSON.stringify(roster));rebuild()}
+function today(){return new Date().toISOString().slice(0,10)}
+function fr(iso){if(!iso)return"";const p=iso.split("-");return p[2]+"/"+p[1]+"/"+p[0]}
+function nextCode(){let mx=0;roster.forEach(p=>{const n=parseInt(String(p[0]).replace(/\D/g,""))||0;if(n>mx)mx=n});return "J"+(mx+1)}
+
+try{const m=JSON.parse(localStorage.getItem(META)||"{}");
+  if(m.club)$("#clubName").value=m.club; if(m.author)$("#author").value=m.author; if(m.season)$("#season").value=m.season;}catch(e){}
+function initials(t){return (t.replace(/[^A-Za-zÀ-ÿ ]/g,"").trim().split(/\s+/).map(w=>w[0]).join("").slice(0,2)||"CR").toUpperCase()}
+function syncClub(){document.title=$("#clubName").value.toUpperCase()+" // SUIVI U13";$("#crest").textContent=initials($("#clubName").value)}
+function saveMeta(){localStorage.setItem(META,JSON.stringify({club:$("#clubName").value,author:$("#author").value,season:$("#season").value}));syncClub()}
+["clubName","author","season"].forEach(id=>$("#"+id).addEventListener("change",saveMeta));
+syncClub();
+$("#ver").title="Dernière mise à jour : "+fr(today());
+
+$("#c_date").value=today();$("#j_date").value=today();
+
+document.querySelectorAll("nav button").forEach(t=>t.onclick=()=>{
+  document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
+  document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));
+  t.classList.add("active");$("#"+t.dataset.v).classList.add("active");
+});
+
+function buildRoster(){
+  const box=$("#roster");box.innerHTML="";
+  roster.forEach((p,i)=>{
+    const d=document.createElement("div");d.className="rosrow";
+    d.innerHTML=`<span class="code">${p[0]}</span><span class="pn">${p[1]}</span><span class="pp">${p[2]||""}</span>`;
+    const b=document.createElement("button");b.className="danger";b.style.padding="4px 10px";b.textContent="Retirer";
+    b.onclick=()=>{if(confirm("Retirer "+p[1]+" de l'effectif ?")){roster.splice(i,1);saveRoster()}};
+    d.appendChild(b);box.appendChild(d);
+  });
+}
+$("#addPlayer").onclick=()=>{
+  const nm=$("#r_name").value.trim();if(!nm){alert("Indique un prénom.");return}
+  roster.push([nextCode(),nm,$("#r_post").value.trim()]);
+  $("#r_name").value="";$("#r_post").value="";saveRoster();
+};
+
+function buildCoach(){
+  const box=$("#coachList");box.innerHTML="";
+  roster.forEach(p=>{
+    const c=document.createElement("div");c.className="jrow";c.dataset.code=p[0];
+    c.innerHTML=`<div class="nm">${p[0]} · ${p[1]}${p[2]?' <span style="color:var(--dim);font-weight:400;text-shadow:none">('+p[2]+')</span>':''}</div>
+      <div class="grid">
+        <div class="col"><label>Présent</label><div class="seg pres"><button data-v="Oui" class="sel">Oui</button><button data-v="Non">Non</button></div></div>
+        <div class="col"><label>Retard</label><div class="seg ret"><button data-v="Non" class="sel">Non</button><button data-v="Oui">Oui</button></div></div>
+        <div class="col motifW" style="display:none"><label>Motif</label><select class="motif"><option>Maladie</option><option>Raison familiale</option><option>École / devoirs</option><option>Blessure légère</option><option>Non communiqué</option></select></div>
+      </div>
+      <div class="grid" style="margin-top:9px">
+        <div class="col"><label>Implication /10</label><div class="rng"><input type="range" min="1" max="10" value="7" class="imp"><output>7</output></div></div>
+        <div class="col"><label>Fatigue /10</label><div class="rng"><input type="range" min="1" max="10" value="4" class="fat"><output>4</output></div></div>
+        <div class="col"><label>Commentaire</label><input class="com" placeholder="optionnel"></div>
+      </div>`;
+    box.appendChild(c);
+    c.querySelectorAll(".seg").forEach(sg=>sg.querySelectorAll("button").forEach(b=>b.onclick=()=>{
+      sg.querySelectorAll("button").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");
+      if(sg.classList.contains("pres"))c.querySelector(".motifW").style.display=(b.dataset.v==="Non")?"":"none";}));
+    c.querySelectorAll('input[type=range]').forEach(r=>r.oninput=()=>r.nextElementSibling.value=r.value);
+  });
+}
+function buildSelect(){
+  const sel=$("#j_player");sel.innerHTML="";
+  roster.forEach(p=>{const o=document.createElement("option");o.value=p[0];o.textContent=p[0]+" - "+p[1];sel.appendChild(o)});
+}
+function rebuild(){buildRoster();buildCoach();buildSelect();$("#s_eff").textContent=roster.length}
+
+function segVal(el){const b=el.querySelector("button.sel");return b?b.dataset.v:""}
+
+$("#saveTeam").onclick=()=>{
+  const date=fr($("#c_date").value),intens=$("#c_int").value;
+  if(!date){alert("Choisis une date.");return}
+  let n=0;
+  document.querySelectorAll("#coachList .jrow").forEach(c=>{
+    const pres=segVal(c.querySelector(".pres")),present=pres==="Oui";
+    data.push({Date:date,Joueur:c.dataset.code,
+      "Présent (Oui/Non)":pres,"Retard (Oui/Non)":present?segVal(c.querySelector(".ret")):"Non",
+      "Motif absence":present?"":c.querySelector(".motif").value,
+      "Intensité séance":present?intens:"",
+      "Implication /10":present?c.querySelector(".imp").value:"",
+      "Fatigue ressentie /10":present?c.querySelector(".fat").value:"",
+      "Commentaire coach":c.querySelector(".com").value.trim()});n++;
+  });
+  save();alert(n+" lignes enregistrées ("+date+").");
+};
+
+$("#j_imp").oninput=e=>$("#j_impv").value=e.target.value;
+$("#j_fat").oninput=e=>$("#j_fatv").value=e.target.value;
+$("#j_pres").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+  $("#j_pres").querySelectorAll("button").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");
+  $("#j_motifWrap").style.display=(b.dataset.v==="Non")?"":"none";});
+$("#j_ret").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+  $("#j_ret").querySelectorAll("button").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");});
+$("#savePlayer").onclick=()=>{
+  const date=fr($("#j_date").value);if(!date){alert("Choisis une date.");return}
+  const pres=segVal($("#j_pres")),present=pres==="Oui";
+  data.push({Date:date,Joueur:$("#j_player").value,
+    "Présent (Oui/Non)":pres,"Retard (Oui/Non)":present?segVal($("#j_ret")):"Non",
+    "Motif absence":present?"":$("#j_motif").value,
+    "Intensité séance":present?$("#j_int").value:"",
+    "Implication /10":present?$("#j_imp").value:"",
+    "Fatigue ressentie /10":present?$("#j_fat").value:"",
+    "Commentaire coach":$("#j_com").value.trim()});
+  save();$("#j_com").value="";alert("Enregistré.");
+};
+
+function stats(){
+  const n=data.length;$("#s_lignes").textContent=n;
+  if(!n){$("#s_pres").textContent="--";$("#s_fat").textContent="--";$("#s_imp").textContent="--";return}
+  const pres=data.filter(r=>r["Présent (Oui/Non)"]==="Oui");
+  $("#s_pres").textContent=Math.round(pres.length/n*100)+"%";
+  const avg=k=>{const v=pres.map(r=>parseFloat(r[k])).filter(x=>!isNaN(x));return v.length?(v.reduce((a,b)=>a+b,0)/v.length).toFixed(1):"--"};
+  $("#s_fat").textContent=avg("Fatigue ressentie /10");
+  $("#s_imp").textContent=avg("Implication /10");
+}
+
+function render(){
+  const tb=$("#tbl tbody");tb.innerHTML="";
+  data.forEach((r,i)=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML=COLS.map(c=>`<td>${(r[c]??"")}</td>`).join("")+
+      `<td><button class="danger" style="padding:2px 8px" data-i="${i}">x</button></td>`;
+    tb.appendChild(tr);
+  });
+  tb.querySelectorAll("button").forEach(b=>b.onclick=()=>{data.splice(+b.dataset.i,1);save()});
+  stats();
+}
+function rowsTSV(){return data.map(r=>COLS.map(c=>String(r[c]??"").replace(/\t/g," ")).join("\t")).join("\n")}
+function csv(){const esc=v=>{v=String(v??"");return /[";\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+  return [COLS.join(";")].concat(data.map(r=>COLS.map(c=>esc(r[c])).join(";"))).join("\n")}
+function dl(name,txt,type){const b=new Blob([type.includes("csv")?"﻿"+txt:txt],{type});
+  const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=name;a.click()}
+
+$("#copyXls").onclick=async()=>{if(!data.length){alert("Aucune donnée.");return}
+  try{await navigator.clipboard.writeText(rowsTSV());alert("Copié. Colle dans la colonne A de Présences_Entrainements (Ctrl+V).")}
+  catch(e){const t=document.createElement("textarea");t.value=rowsTSV();document.body.appendChild(t);t.select();document.execCommand("copy");t.remove();alert("Copié.")}};
+$("#dlCsv").onclick=()=>{if(!data.length){alert("Aucune donnée.");return}dl("ressenti_U13.csv",csv(),"text/csv")};
+$("#dlJson").onclick=()=>dl("sauvegarde_ressenti_U13.json",JSON.stringify(data),"application/json");
+$("#imp").onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();
+  rd.onload=()=>{try{const a=JSON.parse(rd.result);if(Array.isArray(a)){data=data.concat(a);save();alert(a.length+" lignes importées.")}}catch(x){alert("Fichier invalide.")}};rd.readAsText(f)};
+$("#clear").onclick=()=>{if(confirm("Effacer toutes les lignes de cet appareil ?")){data=[];save()}};
+
+rebuild();render();
+</script>
+</body>
+</html>
